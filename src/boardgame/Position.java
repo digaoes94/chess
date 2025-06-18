@@ -1,8 +1,7 @@
 package boardgame;
 
 public class Position {
-	private int row;
-	private int col;
+	private int row, col;
 	
 	public Position(int row, int col) {
 		this.row = row;

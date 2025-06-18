@@ -3,8 +3,7 @@ package boardgame;
 import boardgame.exceptions.BoardException;
 
 public class Board {
-	private int rows;
-	private int cols;
+	private int rows, cols;
 	private Piece[][] pieces;
 	
 	public Board(int rows, int cols) {
