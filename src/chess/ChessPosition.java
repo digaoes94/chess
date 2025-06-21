@@ -9,7 +9,11 @@ public class ChessPosition {
 	
 	
 	public ChessPosition(char col, int row) {
-		if (col < 'a' || col > 'h' || row < 1 || row > 8) {
+		if(Character.isLowerCase(col)) {
+			col = Character.toUpperCase(col);
+		}
+		
+		if (col < 'A' || col > 'H' || row < 1 || row > 8) {
 			throw new ChessException("Invalid position, must be between A1 and H8");
 		}
 		this.row = row;
@@ -24,11 +28,11 @@ public class ChessPosition {
 	}
 	
 	protected Position toPosition() {
-		return new Position(8 - row, col - 'a');
+		return new Position(8 - row, col - 'A');
 	}
 	
 	protected static ChessPosition fromPosition(Position pos) {
-		return new ChessPosition((char)('a' - pos.getCol()), 8 - pos.getRow());
+		return new ChessPosition((char)('A' - pos.getCol()), 8 - pos.getRow());
 	}
 
 	@Override
