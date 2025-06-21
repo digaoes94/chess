@@ -39,6 +39,9 @@ public class ChessMatch {
 		if (!board.positionOccupied(pos)) {
 			throw new ChessException("Original position is not occupied.");
 		}
+		if (!board.piece(pos).possiblePath()) {
+			throw new ChessException("No possible moves for this piece.");
+		}
 	}
 	
 	private Piece makeMove(Position before, Position after) {
