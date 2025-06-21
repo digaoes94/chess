@@ -21,6 +21,11 @@ public class Position {
 	public void setCol(int col) {
 		this.col = col;
 	}
+	
+	public void setValues(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
 
 	@Override
 	public String toString() {

@@ -31,6 +31,7 @@ public class ChessMatch {
 		Position bef = before.toPosition();
 		Position af = after.toPosition();
 		validateBefore(bef);
+		validateAfter(bef, af);
 		Piece captured = makeMove(bef, af);
 		return (ChessPiece) captured;
 	}
@@ -41,6 +42,12 @@ public class ChessMatch {
 		}
 		if (!board.piece(pos).possiblePath()) {
 			throw new ChessException("No possible moves for this piece.");
+		}
+	}
+	
+	private void validateAfter(Position before, Position after) {
+		if (!board.piece(before).possibleMove(after)) {
+			throw new ChessException("Invalid move. Choose a valid move for this piece.");
 		}
 	}
 	
