@@ -9,10 +9,6 @@ public class ChessPosition {
 	
 	
 	public ChessPosition(char col, int row) {
-		if(Character.isLowerCase(col)) {
-			col = Character.toUpperCase(col);
-		}
-		
 		if (col < 'A' || col > 'H' || row < 1 || row > 8) {
 			throw new ChessException("Invalid position, must be between A1 and H8");
 		}

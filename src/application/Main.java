@@ -23,6 +23,9 @@ public class Main {
 				System.out.print("Source: ");
 				ChessPosition before = UI.readChessPosition(scan);
 				
+				boolean[][] possibleMoves = match.possibleMoves(before);
+				UI.clearScreen();
+				UI.printBoard(match.getPieces(), possibleMoves);
 				System.out.println();
 				System.out.print("Target: ");
 				ChessPosition target = UI.readChessPosition(scan);

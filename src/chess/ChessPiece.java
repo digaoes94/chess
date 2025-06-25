@@ -18,6 +18,6 @@ public abstract class ChessPiece extends Piece {
 	
 	protected boolean enemyAt(Position pos) {
 		ChessPiece p = (ChessPiece) getBoard().piece(pos);
-		return p!= null && p.getColor() != color;
+		return p != null && p.getColor() != this.color;
 	}
 }

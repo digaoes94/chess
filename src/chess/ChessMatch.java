@@ -27,6 +27,12 @@ public class ChessMatch {
 		return mat;
 	}
 	
+	public boolean[][] possibleMoves(ChessPosition before) {
+		Position pos = before.toPosition();
+		validateBefore(pos);
+		return board.piece(pos).possibleMoves();
+	}
+	
 	public ChessPiece movePiece(ChessPosition before, ChessPosition after) {
 		Position bef = before.toPosition();
 		Position af = after.toPosition();
