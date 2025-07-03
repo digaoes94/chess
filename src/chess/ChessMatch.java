@@ -8,10 +8,14 @@ import chess.pieces.King;
 import chess.pieces.Rook;
 
 public class ChessMatch {
+	private int turn;
+	private Color currentPlayer;
 	private Board board;
 	
 	public ChessMatch() {
 		this.board = new Board(8, 8);
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		initialSetup();
 	}
 	
@@ -27,6 +31,14 @@ public class ChessMatch {
 		return mat;
 	}
 	
+	public int getTurn() {
+		return turn;
+	}
+
+	public Color getCurrentPlayer() {
+		return currentPlayer;
+	}
+
 	public boolean[][] possibleMoves(ChessPosition before) {
 		Position pos = before.toPosition();
 		validateBefore(pos);
@@ -39,12 +51,21 @@ public class ChessMatch {
 		validateBefore(bef);
 		validateAfter(bef, af);
 		Piece captured = makeMove(bef, af);
+		nextTurn();
 		return (ChessPiece) captured;
+	}
+	
+	private void nextTurn() {
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
 	
 	private void validateBefore(Position pos) {
 		if (!board.positionOccupied(pos)) {
 			throw new ChessException("Original position is not occupied.");
+		}
+		if (currentPlayer != ((ChessPiece) board.piece(pos)).getColor()) {
+			throw new ChessException("You can only move your own pieces. Choose wisely.");
 		}
 		if (!board.piece(pos).possiblePath()) {
 			throw new ChessException("No possible moves for this piece.");

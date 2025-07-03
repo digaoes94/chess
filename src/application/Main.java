@@ -18,7 +18,7 @@ public class Main {
 			try {
 				UI.clearScreen();
 				
-				UI.printBoard(match.getPieces());
+				UI.printMatch(match);
 				System.out.println();
 				System.out.print("Source: ");
 				ChessPosition before = UI.readChessPosition(scan);
