@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import boardgame.Board;
 import boardgame.Piece;
@@ -14,6 +15,8 @@ public class ChessMatch {
 	private int turn;
 	private Color currentPlayer;
 	private Board board;
+	private boolean check;
+	
 	private List<Piece> piecesAvaible = new ArrayList<Piece>();
 	private List<Piece> piecesCaptures = new ArrayList<Piece>();
 	
@@ -92,6 +95,32 @@ public class ChessMatch {
 			piecesCaptures.add(captured);
 		}
 		return captured;
+	}
+	
+	private void undoCheck(Position before, Position after, Piece captured) {
+		Piece p = board.removePiece(after);
+		board.placePiece(p, before);
+		if (captured != null) {
+			board.placePiece(p, after);
+			piecesCaptures.remove(captured);
+			piecesAvaible.add(captured);
+		}
+	}
+	
+	private Color enemy(Color color) {
+		return (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
+	}
+	
+	private ChessPiece king(Color color) {
+		List<Piece> list = piecesAvaible.stream().filter(x -> ((ChessPiece) x).getColor() == color).collect(Collectors.toList());
+		
+		for (Piece p : list) {
+			if (p instanceof King) {
+				return (ChessPiece) p;
+			}
+		}
+		
+		throw new IllegalStateException("King of color " + color + " isn't on the board.");
 	}
 	
 	private void placeNewPiece(char col, int row, ChessPiece piece) {
