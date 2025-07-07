@@ -16,6 +16,7 @@ public class ChessMatch {
 	private Color currentPlayer;
 	private Board board;
 	private boolean check;
+	private boolean checkMate;
 	
 	private List<Piece> piecesAvaible = new ArrayList<Piece>();
 	private List<Piece> piecesCaptures = new ArrayList<Piece>();
@@ -50,6 +51,10 @@ public class ChessMatch {
 	public boolean getCheck() {
 		return check;
 	}
+	
+	public boolean getCheckMate() {
+		return checkMate;
+	}
 
 	public boolean[][] possibleMoves(ChessPosition before) {
 		Position pos = before.toPosition();
@@ -68,10 +73,15 @@ public class ChessMatch {
 			undoCheck(bef, af, captured);
 			throw new ChessException("You stupid? Don't put yourself in CHECK! C'mon dude.");
 		}
-		
 		check = (testCheck(enemy(currentPlayer))) ? true : false;
 		
-		nextTurn();
+		if(testCheckMate(enemy(currentPlayer))) {
+			checkMate = true;
+		}
+		else {
+			nextTurn();
+		}
+		
 		return (ChessPiece) captured;
 	}
 	
@@ -148,12 +158,41 @@ public class ChessMatch {
 		return false;
 	}
 	
+	private boolean testCheckMate(Color color) {
+		if (!testCheck(color)) {
+			return false;
+		}
+		
+		List<Piece> enemies = piecesAvaible.stream().filter(x -> ((ChessPiece) x).getColor() == enemy(color)).collect(Collectors.toList());
+		for (Piece p : enemies) {
+			boolean[][] mat = p.possibleMoves();
+			
+			for(int a = 0; a < board.getRows(); a++) {
+				for(int b = 0; b < board.getRows(); b++) {
+					if(mat[a][b]) {
+						Position before = ((ChessPiece) p).getChessPosition().toPosition();
+						Position after = new Position(a, b);
+						Piece captured = makeMove(before, after);
+						boolean testCheck = testCheck(color);
+						undoCheck(before, after, captured);
+						
+						if(!testCheck) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
 	private void placeNewPiece(char col, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(col, row).toPosition());
 		piecesAvaible.add(piece);
 	}
 	
 	private void initialSetup() {
+		/*
 		placeNewPiece('C', 1, new Rook(board, Color.WHITE));
         placeNewPiece('C', 2, new Rook(board, Color.WHITE));
         placeNewPiece('D', 2, new Rook(board, Color.WHITE));
@@ -167,5 +206,13 @@ public class ChessMatch {
         placeNewPiece('E', 7, new Rook(board, Color.BLACK));
         placeNewPiece('E', 8, new Rook(board, Color.BLACK));
         placeNewPiece('D', 8, new King(board, Color.BLACK));
+        */
+		
+		placeNewPiece('H', 7, new Rook(board, Color.WHITE));
+        placeNewPiece('D', 1, new Rook(board, Color.WHITE));
+        placeNewPiece('E', 1, new King(board, Color.WHITE));
+        
+        placeNewPiece('B', 8, new Rook(board, Color.BLACK));
+        placeNewPiece('A', 8, new King(board, Color.BLACK));
 	}
 }
