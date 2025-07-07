@@ -24,8 +24,8 @@ public class King extends ChessPiece {
 	@Override
 	public boolean[][] possibleMoves() {
 		boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
-		
 		Position p = new Position(0, 0);
+		
 		// UP
 		p.setValues(pos.getRow() - 1, pos.getCol());
 		if (getBoard().positionExists(p) && canMove(p)) {
