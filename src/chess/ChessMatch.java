@@ -47,6 +47,10 @@ public class ChessMatch {
 		return currentPlayer;
 	}
 
+	public boolean getCheck() {
+		return check;
+	}
+
 	public boolean[][] possibleMoves(ChessPosition before) {
 		Position pos = before.toPosition();
 		validateBefore(pos);
@@ -59,6 +63,14 @@ public class ChessMatch {
 		validateBefore(bef);
 		validateAfter(bef, af);
 		Piece captured = makeMove(bef, af);
+		
+		if(testCheck(currentPlayer)) {
+			undoCheck(bef, af, captured);
+			throw new ChessException("You stupid? Don't put yourself in CHECK! C'mon dude.");
+		}
+		
+		check = (testCheck(enemy(currentPlayer))) ? true : false;
+		
 		nextTurn();
 		return (ChessPiece) captured;
 	}
@@ -121,6 +133,19 @@ public class ChessMatch {
 		}
 		
 		throw new IllegalStateException("King of color " + color + " isn't on the board.");
+	}
+	
+	private boolean testCheck(Color color) {
+		Position kingPos = king(color).getChessPosition().toPosition();
+		List<Piece> enemies = piecesAvaible.stream().filter(x -> ((ChessPiece) x).getColor() == enemy(color)).collect(Collectors.toList());
+		
+		for (Piece p : enemies) {
+			boolean[][] mat = p.possibleMoves();
+			if (mat[kingPos.getRow()][kingPos.getCol()]) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void placeNewPiece(char col, int row, ChessPiece piece) {
