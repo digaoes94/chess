@@ -121,6 +121,25 @@ public class ChessMatch {
 			piecesAvaible.remove(captured);
 			piecesCaptures.add(captured);
 		}
+		
+		//castlings
+		//close castling
+		if(p instanceof King && after.getCol() == before.getCol() + 2) {
+			Position beforeRook = new Position(before.getRow(), before.getCol() + 3);
+			Position afterRook = new Position(before.getRow(), before.getCol() + 1);
+			ChessPiece closeRook = (ChessPiece) board.removePiece(beforeRook);
+			board.placePiece(closeRook, afterRook);
+			closeRook.increaseMove();
+		}
+		//far castling
+		if(p instanceof King && after.getCol() == before.getCol() - 2) {
+			Position beforeRook = new Position(before.getRow(), before.getCol() - 4);
+			Position afterRook = new Position(before.getRow(), before.getCol() - 1);
+			ChessPiece closeRook = (ChessPiece) board.removePiece(beforeRook);
+			board.placePiece(closeRook, afterRook);
+			closeRook.increaseMove();
+		}
+		
 		return captured;
 	}
 	
@@ -133,6 +152,24 @@ public class ChessMatch {
 			board.placePiece(p, after);
 			piecesCaptures.remove(captured);
 			piecesAvaible.add(captured);
+		}
+		
+		//undo castlings
+		//close castling
+		if(p instanceof King && after.getCol() == before.getCol() + 2) {
+			Position beforeRook = new Position(before.getRow(), before.getCol() + 3);
+			Position afterRook = new Position(before.getRow(), before.getCol() + 1);
+			ChessPiece closeRook = (ChessPiece) board.removePiece(afterRook);
+			board.placePiece(closeRook, beforeRook);
+			closeRook.decreaseMove();
+		}
+		//far castling
+		if(p instanceof King && after.getCol() == before.getCol() - 2) {
+			Position beforeRook = new Position(before.getRow(), before.getCol() - 4);
+			Position afterRook = new Position(before.getRow(), before.getCol() - 1);
+			ChessPiece closeRook = (ChessPiece) board.removePiece(afterRook);
+			board.placePiece(closeRook, beforeRook);
+			closeRook.decreaseMove();
 		}
 	}
 	
