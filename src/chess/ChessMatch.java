@@ -155,6 +155,22 @@ public class ChessMatch {
 			closeRook.increaseMove();
 		}
 		
+		//en passant
+		if(p instanceof Pawn) {
+			if(before.getCol() != after.getCol() && captured == null) {
+				Position pawnPos;
+				if(p.getColor() == Color.WHITE) {
+					pawnPos = new Position(after.getRow() + 1, after.getCol());
+				}
+				else {
+					pawnPos = new Position(after.getRow() - 1, after.getCol());
+				}
+				captured = board.removePiece(pawnPos);
+				piecesCaptures.add(captured);
+				piecesAvaible.remove(captured);
+			}
+		}
+		
 		return captured;
 	}
 	
@@ -185,6 +201,21 @@ public class ChessMatch {
 			ChessPiece closeRook = (ChessPiece) board.removePiece(afterRook);
 			board.placePiece(closeRook, beforeRook);
 			closeRook.decreaseMove();
+		}
+		
+		//en passant
+		if(p instanceof Pawn) {
+			if(before.getCol() != after.getCol() && captured == vPassant) {
+				ChessPiece pawn = (ChessPiece) board.removePiece(after);
+				Position pawnPos;
+				if(p.getColor() == Color.WHITE) {
+					pawnPos = new Position(3, after.getCol());
+				}
+				else {
+					pawnPos = new Position(4, after.getCol());
+				}
+				board.placePiece(pawn, pawnPos);
+			}
 		}
 	}
 	

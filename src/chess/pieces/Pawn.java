@@ -56,7 +56,7 @@ public class Pawn extends ChessPiece {
 				
 				Position right = new Position(pos.getRow(), pos.getCol() + 1);
 				if(getBoard().positionExists(right) && enemyAt(right) && getBoard().piece(right) == match.getVPassant()) {
-					mat[left.getRow() - 1][left.getCol()] = true;
+					mat[right.getRow() - 1][right.getCol()] = true;
 				}
 			}
 		}
@@ -96,7 +96,7 @@ public class Pawn extends ChessPiece {
 				
 				Position right = new Position(pos.getRow(), pos.getCol() + 1);
 				if(getBoard().positionExists(right) && enemyAt(right) && getBoard().piece(right) == match.getVPassant()) {
-					mat[left.getRow() + 1][left.getCol()] = true;
+					mat[right.getRow() + 1][right.getCol()] = true;
 				}
 			}
 		}
