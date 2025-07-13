@@ -37,6 +37,11 @@ public class Main {
 				if (captured != null) {
 					captures.add(captured);
 				}
+				
+				if(match.getPromoted() != null) {
+					System.out.print("Inform the type of piece (Q/R/B/N) to promote pawn: ");
+					match.promotePawn(scan.nextLine());
+				}
 			}
 			catch (ChessException e) {
 				System.out.println(e.getMessage());
