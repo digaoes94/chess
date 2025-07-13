@@ -2,13 +2,16 @@ package chess.pieces;
 
 import boardgame.Board;
 import boardgame.Position;
+import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.Color;
 
 public class Pawn extends ChessPiece {
+	private ChessMatch match;
 
-	public Pawn(Board board, Color color) {
+	public Pawn(Board board, Color color, ChessMatch match) {
 		super(board, color);
+		this.match = match;
 	}
 
 	@Override
@@ -43,6 +46,19 @@ public class Pawn extends ChessPiece {
 			if(getBoard().positionExists(p) && enemyAt(p)) {
 				mat[p.getRow()][p.getCol()] = true;
 			}
+			
+			//en passant white
+			if(pos.getRow() == 3) {
+				Position left = new Position(pos.getRow(), pos.getCol() - 1);
+				if(getBoard().positionExists(left) && enemyAt(left) && getBoard().piece(left) == match.getVPassant()) {
+					mat[left.getRow() - 1][left.getCol()] = true;
+				}
+				
+				Position right = new Position(pos.getRow(), pos.getCol() + 1);
+				if(getBoard().positionExists(right) && enemyAt(right) && getBoard().piece(right) == match.getVPassant()) {
+					mat[left.getRow() - 1][left.getCol()] = true;
+				}
+			}
 		}
 		else {
 			//normal move
@@ -69,6 +85,19 @@ public class Pawn extends ChessPiece {
 			p.setValues(pos.getRow() + 1, pos.getCol() + 1);
 			if(getBoard().positionExists(p) && enemyAt(p)) {
 				mat[p.getRow()][p.getCol()] = true;
+			}
+			
+			//en passant black
+			if(pos.getRow() == 4) {
+				Position left = new Position(pos.getRow(), pos.getCol() - 1);
+				if(getBoard().positionExists(left) && enemyAt(left) && getBoard().piece(left) == match.getVPassant()) {
+					mat[left.getRow() + 1][left.getCol()] = true;
+				}
+				
+				Position right = new Position(pos.getRow(), pos.getCol() + 1);
+				if(getBoard().positionExists(right) && enemyAt(right) && getBoard().piece(right) == match.getVPassant()) {
+					mat[left.getRow() + 1][left.getCol()] = true;
+				}
 			}
 		}
 		
